@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 st.set_page_config(page_title="Logistics AI Dashboard", layout="wide")
 
 st.title("Logistics Cost & Carbon Hybrid Optimizer")
-st.markdown("Independent Research Prototype: RF-Fuzzy-MOO Model")
+st.markdown("Developed by team Winter Wolves")
 
 # --- SIDEBAR CONTROLS ---
 st.sidebar.header("User Parameters")
