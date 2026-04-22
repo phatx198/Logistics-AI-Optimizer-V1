@@ -15,6 +15,26 @@ st.sidebar.header("User Parameters")
 uploaded_file = st.sidebar.file_exists = st.sidebar.file_uploader("Upload Logistics Excel", type=["xlsx"])
 cost_weight = st.sidebar.slider("Cost Priority (W)", 0.0, 1.0, 0.5)
 carbon_weight = 1.0 - cost_weight
+if uploaded_file is not None:
+    df = pd.read_excel(uploaded_file)
+    
+    # 1. Define exactly what the code expects
+    expected_cols = ['Trip_Length', 'Cargo_Weight', 'Total_Time', 'Oil_Cost', 'Total_Cost', 'Carbon_Emission']
+    
+    # 2. Check if the Excel matches the code
+    missing = [col for col in expected_cols if col not in df.columns]
+    
+    if missing:
+        st.error(f"⚠️ **Excel Header Mismatch**")
+        st.write(f"The following columns are missing or misspelled: `{', '.join(missing)}` ")
+        st.info("Please rename your Excel columns to match the names above exactly.")
+        
+        # This is the secret! It stops the app here so the Traceback never shows.
+        st.stop() 
+    
+    # --- Only if columns are correct, the rest of the model runs ---
+    X = df[['Trip_Length', 'Cargo_Weight', 'Total_Time', 'Oil_Cost']]
+    # ... rest of your Random Forest code ...
 
 if uploaded_file:
     df = pd.read_excel(uploaded_file)
@@ -55,4 +75,4 @@ if uploaded_file:
         
     st.success(f"Current Policy Balance: {cost_weight*100}% Cost / {carbon_weight*100}% Green")
 else:
-    st.info("Please upload your Logistics_Data.xlsx file to start.")
+    st.info("Please upload your Excel data file to start.")
